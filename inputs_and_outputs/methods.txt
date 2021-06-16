@@ -1,0 +1,120 @@
+// Methods
+public static void printLevelOrder() {
+    int h = height(root);
+    for (int i = 1; i <= h; i++) {
+        printGivenLevel(root, i);
+        System.out.println();
+    }
+}
+
+public static void printGivenLevel(Node root, int level) {
+    if (root == null) {
+        return;
+    }
+    if (level == 1) {
+        System.out.print(root.keys + " " + Boolean.toString(root.isLeaf) + "  ");
+    } else {
+        for (int i = 0; i < root.pointers.size(); i++) {
+            printGivenLevel(root.pointers.get(i), level - 1);
+        }
+    }
+}
+
+public static int height(Node root) {
+    if (root == null) {
+        return 0;
+    } else if (root.isLeaf == true) {
+        return 1;
+    } else {
+        return height(root.pointers.get(0)) + 1;
+    }
+}
+
+public static void initialize(int key) {
+    bplustree.m = key;
+}
+
+public static void insert(int key, Float val){
+    Node thisNode = null;
+    Node nextNode = root;
+
+    int ind;
+
+    while (nextNode.isLeaf == false) {
+        thisNode = nextNode;
+
+        for (int i = 0; i < nextNode.keys.size(); i++){
+            if (key < nextNode.keys.get(i)){
+                nextNode = nextNode.pointers.get(i);
+                ind = i;
+            } else {
+                nextNode = nextNode.pointers.get(nextNode.keys.size());
+                ind = nextNode.keys.size();
+            }
+        }
+    }
+
+    nextNode.addKey(key, val);
+
+    if (nextNode.keys.size() > m - 1 ){
+        nextNode.split();
+
+        if (thisNode != null){
+            if (thisNode.keys.size() < m - 1 ){
+                
+                thisNode.keys.remove(ind);
+
+                int mid = nextNode.keys.get(0);
+
+                for (int i = 0; i < thisNode.keys.size(); i++){
+                    if (key < thisNode.keys.get(i)){
+                        thisNode.keys.add(i, mid);
+                        while (i < nextNode.vals.size()){
+                            thisNode.vals.add(i, nextNode.vals.get(i));
+                            i++;
+                        }
+                        return;
+                    }
+                }
+
+                thisNode.keys.add(mid);
+                thisNode.pointers.add(nextNode.pointers);
+            }
+            
+        }
+
+    }
+
+}
+
+public static void delete(int key) {
+    System.out.print("delete ");
+    System.out.println(key);
+}
+
+public static void search(int key) {
+    
+    Node nextNode = root;
+
+    while (nextNode.isLeaf == false){
+
+    }
+
+    for (int i = 0; i< nextNode.keys.size(); i++){
+        if (key == nextNode.keys.get(i)){
+            Float ans = nextNode.vals.get(i);
+            System.out.println(ans);
+            return;
+        }
+    }
+
+    System.out.println("Key not in tree.");
+    return;
+
+
+}
+
+public static void rangeSearch(int key1, int key2) {
+    System.out.print("rangeSearch ");
+    System.out.println(key1 + " " + key2);
+}
